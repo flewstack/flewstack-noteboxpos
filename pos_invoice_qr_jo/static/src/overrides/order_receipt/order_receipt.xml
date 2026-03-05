@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="point_of_sale.OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">
+        <xpath expr="." position="replace">
+            <div class="pos-receipt" style="font-family: Tahoma, Verdana, Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #000; width: 100%; padding: 8px;">
+                <!-- Logo Section -->
+                <div style="text-align: center; margin-bottom: 8px;">
+                    <t t-if="order.config.receiptLogoUrl">
+                        <img t-att-src="order.config.receiptLogoUrl" alt="Logo" style="max-height: 60px;" />
+                    </t>
+                </div>
+
+                <!-- Company Info -->
+                <div style="text-align: center; font-weight: bold; margin-bottom: 10px;">
+                    مؤسسةاسماعيل التكريتي
+                    <div>Branch: <t t-esc="order.config.name || 'Unknown Branch'" /></div>
+                    <t t-if="order.company.phone">
+                        <div>Phone: <t t-esc="order.company.phone" /></div>
+                    </t>
+                    <t t-if="order.company.vat">
+                        <div>Tax No: <t t-esc="order.company.vat" /></div>
+                    </t>
+                    <t t-if="order.company.email">
+                        <div><t t-esc="order.company.email" /></div>
+                    </t>
+                    <t t-if="order.company.website">
+                        <div><t t-esc="order.company.website" /></div>
+                    </t>
+                </div>
+
+                <!-- Customer Info -->
+                <t t-if="order.partner_id">
+                    <div style="border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 6px 0; font-weight: bold; font-size: 14px; text-align: left; margin: 10px 0;">
+                        Customer: <t t-esc="order.partner_id.name" />
+                    </div>
+                </t>
+
+                <!-- Optional Header -->
+                <t t-if="order.config.receipt_header">
+                    <div style="text-align: center; font-size: 13px; margin: 10px 0; white-space: pre-line;">
+                        <t t-esc="order.config.receipt_header" />
+                    </div>
+                </t>
+
+                <!-- Product Table -->
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #000;">
+                            <th style="text-align: left; padding: 4px;">Product</th>
+                            <th style="text-align: right; padding: 4px;">Qty</th>
+                            <th style="text-align: right; padding: 4px;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-if="order.lines.length">
+                            <t t-foreach="order.lines" t-as="line" t-key="line.uuid">
+                                <tr>
+                                    <td style="padding: 4px;">
+                                        <t t-esc="line.full_product_name || line.product_id.display_name" />
+                                        <t t-if="line.discount &amp;&amp; line.discount > 0">
+                                            <div style="font-size: 13px;">Discount: <t t-esc="line.discount" />%</div>
+                                        </t>
+                                        <t t-if="line.customer_note">
+                                            <div style="font-size: 13px;"><t t-esc="line.customer_note" /></div>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: right; padding: 4px;">
+                                        <t t-esc="line.quantityStr.qtyStr" />
+                                    </td>
+                                    <td style="text-align: right; padding: 4px;">
+                                        <t t-esc="line.currencyDisplayPrice" />
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+
+                <!-- Totals -->
+                <div style="margin-top: 10px; font-size: 14px;">
+                    <t t-set="taxTotals" t-value="order.prices.taxDetails" />
+                    <t t-if="taxTotals and taxTotals.has_tax_groups">
+                        <div style="border-top: 1px dashed #000; padding-top: 5px; font-weight: bold;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Subtotal:</span>
+                                <span><t t-esc="formatCurrency(order.priceExcl)" /></span>
+                            </div>
+                            <t t-foreach="taxTotals.subtotals" t-as="subtotal" t-key="subtotal.name">
+                                <t t-foreach="subtotal.tax_groups" t-as="tax_group" t-key="tax_group.id">
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span><t t-esc="tax_group.group_name" /></span>
+                                        <span><t t-esc="formatCurrency(tax_group.tax_amount_currency)" /></span>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+                    </t>
+
+                    <!-- Total Discount -->
+                    <t t-set="totalDiscount" t-value="order.getTotalDiscount()" />
+                    <t t-if="totalDiscount">
+                        <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; margin-top: 8px; border-top: 1px dashed #000; padding-top: 5px;">
+                            <span>Discounts:</span>
+                            <span><t t-esc="formatCurrency(totalDiscount)" /></span>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Payment Lines -->
+                <t t-if="paymentLines.length">
+                    <t t-foreach="paymentLines" t-as="line" t-key="line.uuid">
+                        <div style="display: flex; justify-content: space-between; font-size: 14px; border-top: 1px dashed #000; margin-top: 5px; padding-top: 4px;">
+                            <span><t t-esc="line.payment_method_id.name" /></span>
+                            <span><t t-esc="formatCurrency(line.getAmount())" /></span>
+                        </div>
+                    </t>
+                </t>
+
+                <!-- Change -->
+                <t t-if="order.showChange">
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; margin-top: 8px; border-top: 1px dashed #000; padding-top: 5px;">
+                        <span>Change:</span>
+                        <span><t t-esc="formatCurrency(order.change)" /></span>
+                    </div>
+                </t>
+
+                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 8px;">
+                    <span>TOTAL:</span>
+                    <span><t t-esc="order.currencyDisplayPriceIncl" /></span>
+                </div>
+
+                <!-- Footer -->
+                <div style="margin-top: 16px; font-size: 13px;">
+                    <div><t t-esc="order.pos_reference || order.name" /></div>
+                    <div t-if="order.date_order"><t t-esc="order.formatDateOrTime('date_order')" /></div>
+                    <div t-if="order.invoice_qr_code_src" class="invoice-qr-section">
+                        <br/>
+                        <div class="pos-receipt-order-data mb-2 text-center">
+                            <strong>Invoice QR Code</strong>
+                        </div>
+                        <div class="text-center mb-2">
+                            <img t-att-src="order.config._base_url + order.invoice_qr_code_src"
+                                 class="pos-receipt-qrcode"
+                                 style="max-width: 150px; max-height: 150px;"
+                                 alt="Invoice QR Code"/>
+                        </div>
+                        <div class="pos-receipt-order-data text-center">
+                            Scan for invoice details
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 10px;">
+                        <div>------------------------------</div>
+                        <div>Served by: <t t-esc="order.getCashierName() || 'Cashier'" /></div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </t>
+</templates>

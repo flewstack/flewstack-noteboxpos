@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_brand_list_view" model="ir.ui.view">
+        <field name="name">product.brand.list</field>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+            <list default_order="name">
+                <field name="name"/>
+                <field name="product_count" readonly="1"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="product_brand_form_view" model="ir.ui.view">
+        <field name="name">product.brand.form</field>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+            <form string="Brand">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            class="oe_stat_button"
+                            type="action"
+                            name="%(product.product_template_action)d"
+                            context="{
+                                'search_default_brand_id': id,
+                                'default_brand_id': id,
+                            }"
+                            icon="fa-cube"
+                        >
+                            <field name="product_count" widget="statinfo" string="Products"/>
+                        </button>
+                        <button
+                            class="oe_stat_button"
+                            type="action"
+                            name="%(sale.action_orders)d"
+                            context="{'search_default_brand_id': id}"
+                            icon="fa-line-chart"
+                        >
+                            <field name="sale_total" widget="statinfo" string="Sales Total"/>
+                        </button>
+                        <button
+                            class="oe_stat_button"
+                            type="action"
+                            name="%(purchase.purchase_form_action)d"
+                            context="{'search_default_brand_id': id}"
+                            icon="fa-shopping-cart"
+                        >
+                            <field name="purchase_total" widget="statinfo" string="Purchase Total"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Brand Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Notebox"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="active"/>
+                            <field
+                                name="logo"
+                                widget="image"
+                                class="oe_avatar"
+                                options="{'preview_image': 'logo'}"
+                                string="Logo"
+                            />
+                        </group>
+                        <group>
+                            <field name="description" placeholder="Brand notes"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products">
+                            <field name="product_template_ids" context="{'default_brand_id': id}">
+                                <kanban class="o_kanban_mobile">
+                                    <templates>
+                                        <t t-name="card">
+                                            <t t-call="kanban-box"/>
+                                        </t>
+                                        <t t-name="kanban-box">
+                                            <div class="oe_kanban_global_click o_kanban_card">
+                                                <div class="o_kanban_image">
+                                                    <field name="image_128" widget="image" class="oe_avatar"/>
+                                                </div>
+                                                <div class="o_kanban_details">
+                                                    <strong><field name="name"/></strong>
+                                                    <div class="text-muted">
+                                                        <field name="default_code"/>
+                                                    </div>
+                                                    <div class="text-muted">
+                                                        <field name="categ_id"/>
+                                                    </div>
+                                                    <div>
+                                                        <field name="type"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+                        <page string="Sales (SO)">
+                            <field name="sale_order_line_ids" readonly="1">
+                                <list create="0" edit="0">
+                                    <field name="order_id"/>
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Sales (POS)">
+                            <field name="pos_order_line_ids" readonly="1">
+                                <list create="0" edit="0">
+                                    <field name="order_id"/>
+                                    <field name="product_id"/>
+                                    <field name="qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal_incl" string="Total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Purchases">
+                            <field name="purchase_order_line_ids" readonly="1">
+                                <list create="0" edit="0">
+                                    <field name="order_id"/>
+                                    <field name="product_id"/>
+                                    <field name="product_qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Availability">
+                            <field name="stock_quant_ids" readonly="1">
+                                <list create="0" edit="0">
+                                    <field name="location_id"/>
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="available_quantity"/>
+                                    <field name="reserved_quantity"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="product_brand_action" model="ir.actions.act_window">
+        <field name="name">Brands</field>
+        <field name="res_model">product.brand</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_product_brand"
+        name="Brands"
+        parent="sale.prod_config_main"
+        action="product_brand_action"
+        groups="product.group_product_manager"
+        sequence="25"
+    />
+</odoo>

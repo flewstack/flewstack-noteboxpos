@@ -1,0 +1,38 @@
+/* POS Invoice QR Code Jordan - Custom Styles */
+
+.invoice-qr-section {
+    page-break-inside: avoid;
+}
+
+.invoice-qr-section .pos-receipt-qrcode {
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: white;
+}
+
+.payment-screen .create-invoice {
+    background-color: #17a2b8;
+    color: white;
+    border-color: #17a2b8;
+}
+
+.payment-screen .create-invoice:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.payment-screen .create-invoice:focus {
+    box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+}
+
+/* Print-specific styles */
+@media print {
+    .invoice-qr-section .pos-receipt-qrcode {
+        border: none;
+        padding: 0;
+        background-color: transparent;
+    }
+}

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_session_clear_cash_auth,pos.session.clear.cash.auth,model_pos_session_clear_cash_auth,,1,1,1,0
+access_pos_session_clear_cash_wizard,pos.session.clear.cash.wizard,model_pos_session_clear_cash_wizard,,1,1,1,0
+access_account_move_transfer_cash_wizard,account.move.transfer.cash.wizard,model_account_move_transfer_cash_wizard,,1,1,1,0

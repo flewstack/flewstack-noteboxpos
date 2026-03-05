@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_move_transfer_cash_wizard_form" model="ir.ui.view">
+        <field name="name">account.move.transfer.cash.wizard.form</field>
+        <field name="model">account.move.transfer.cash.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Transfer Cash">
+                <sheet>
+                    <group>
+                        <field name="move_id"/>
+                    </group>
+                    <group string="Journals" col="2">
+                        <field name="source_journal_id" readonly="1"/>
+                        <field name="destination_journal_id"/>
+                    </group>
+                    <separator string="Amount"/>
+                    <group col="2">
+                        <field name="amount" readonly="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" string="Transfer" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

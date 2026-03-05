@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_session_clear_cash_auth_form" model="ir.ui.view">
+        <field name="name">pos.session.clear.cash.auth.form</field>
+        <field name="model">pos.session.clear.cash.auth</field>
+        <field name="arch" type="xml">
+            <form string="Clear Cash Authentication">
+                <sheet>
+                    <group>
+                        <field name="session_id"/>
+                    </group>
+                    <group string="Credentials" col="2">
+                        <field name="clear_cash_id"/>
+                        <field name="clear_cash_password" password="True"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_authenticate" string="Verify" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pos_session_clear_cash_wizard_form" model="ir.ui.view">
+        <field name="name">pos.session.clear.cash.wizard.form</field>
+        <field name="model">pos.session.clear.cash.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Destination Journal">
+                <sheet>
+                    <group>
+                        <field name="session_id"/>
+                        <field name="employee_public_id"/>
+                    </group>
+                    <group string="Journals" col="2">
+                        <field name="source_journal_id" readonly="1"/>
+                        <field name="destination_journal_id" readonly="1"/>
+                    </group>
+                    <separator string="Cash Summary"/>
+                    <group col="2">
+                        <field name="expected_amount" readonly="1"/>
+                        <field name="fixed_cash_amount" readonly="1"/>
+                        <field name="expected_transfer_amount" readonly="1"/>
+                        <field name="transfer_amount"/>
+                        <field name="difference_amount" readonly="1"/>
+                        <field name="cash_received" modifiers="{'required': [('difference_amount', '!=', 0.0)]}"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

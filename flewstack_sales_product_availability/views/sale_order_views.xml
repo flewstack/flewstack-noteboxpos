@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="flewstack_view_order_form_inherit_sales_product_availability" model="ir.ui.view">
+        <field name="name">sale.order.form.flewstack.sales.product.availability</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//list//field[@name='name']" position="after">
+                <button
+                    name="action_view_flewstack_sales_product_availability"
+                    type="object"
+                    icon="fa-info-circle"
+                    title="Product availability"
+                    class="btn-link text-info px-0 o_flewstack_availability_button"
+                    invisible="display_type or not product_id or (virtual_id and not id)"
+                />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

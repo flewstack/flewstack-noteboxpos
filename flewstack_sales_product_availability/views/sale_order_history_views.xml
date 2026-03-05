@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="flewstack_view_order_form_inherit_customer_history" model="ir.ui.view">
+        <field name="name">sale.order.form.flewstack.customer.history</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Customer History" invisible="not partner_id">
+                    <field name="flewstack_customer_history_ids" nolabel="1">
+                        <list create="0" edit="0" delete="0">
+                            <field name="name" string="Order"/>
+                            <field name="date_order"/>
+                            <field name="amount_total"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

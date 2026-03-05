@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_session_form_inherit_flewstack_session_closing" model="ir.ui.view">
+        <field name="name">pos.session.form.flewstack.session.closing</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@id='validate_closing_control']" position="after">
+                <button name="action_open_clear_cash_auth" type="object" string="Clear Cash"
+                        class="btn-primary" invisible="state != 'closed'"/>
+            </xpath>
+            <xpath expr="//header/field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">opened,closing_control,closed,handed_over</attribute>
+            </xpath>
+            <xpath expr="//field[@name='stop_at']" position="attributes">
+                <attribute name="invisible">state not in ('closed', 'handed_over')</attribute>
+            </xpath>
+            <xpath expr="//field[@name='cash_register_balance_end_real']" position="attributes">
+                <attribute name="invisible">state not in ('closed', 'handed_over')</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='cash_register_balance_end_real']" position="after">
+                <field name="handed_over_move_id" readonly="1" invisible="state != 'handed_over'"/>
+                <field name="handed_over_by_id" readonly="1" invisible="state != 'handed_over'"/>
+                <field name="handed_over_at" readonly="1" invisible="state != 'handed_over'"/>
+                <field name="handed_over_employee_id" readonly="1" invisible="state != 'handed_over'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_pos_session_tree_inherit_flewstack_session_closing" model="ir.ui.view">
+        <field name="name">pos.session.list.flewstack.session.closing</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="decoration-success">state in ('opened', 'closed')</attribute>
+                <attribute name="decoration-info">state == 'handed_over'</attribute>
+                <attribute name="decoration-warning">state == 'closing_control'</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_pos_session_kanban_inherit_flewstack_session_closing" model="ir.ui.view">
+        <field name="name">pos.session.kanban.flewstack.session.closing</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="options">{'classes': {'opening_control': 'default', 'opened': 'success', 'closing_control': 'warning', 'closed': 'warning', 'handed_over': 'success'}}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

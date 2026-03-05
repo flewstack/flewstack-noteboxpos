@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="flewstack_preview_documents.ReportPreviewDialog">
+        <Dialog
+            t-props="{
+                title: props.title || 'Document Preview',
+                size: 'xl',
+                bodyClass: 'o_flewstack_report_preview_dialog_body p-0'
+            }"
+        >
+            <div class="o_flewstack_report_preview_iframe_wrapper">
+                <iframe
+                    t-att-src="props.url"
+                    class="o_flewstack_report_preview_iframe"
+                    frameborder="0"
+                    title="Document preview"
+                />
+            </div>
+            <t t-set-slot="footer">
+                <button class="btn btn-outline-secondary" type="button" t-on-click="openInNewTab">
+                    Open in New Tab
+                </button>
+                <button class="btn btn-primary" type="button" t-on-click="props.close">
+                    Close
+                </button>
+            </t>
+        </Dialog>
+    </t>
+</templates>

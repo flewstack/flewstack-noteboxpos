@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_invoice_qr_jo.PaymentScreenButtons" t-inherit="point_of_sale.PaymentScreenButtons" t-inherit-mode="extension">
+        <xpath expr="//button[contains(@class, 'js_invoice')]" position="attributes">
+            <attribute name="t-att-class">{ 'highlight active text-action': true }</attribute>
+            <attribute name="t-att-disabled">true</attribute>
+            <attribute name="t-on-click"/>
+        </xpath>
+        <xpath expr="//button[contains(@class, 'js_invoice')]/i[last()]" position="attributes">
+            <attribute name="t-attf-class">fa me-2 fa-check-square text-action</attribute>
+        </xpath>
+    </t>
+</templates>
