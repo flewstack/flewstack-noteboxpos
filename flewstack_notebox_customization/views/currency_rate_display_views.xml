@@ -8,7 +8,7 @@
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group[@name='group1']//field[@name='ref']" position="after">
+            <xpath expr="(//sheet//field[@name='ref'] | //sheet//field[@name='payment_reference'] | //sheet//field[@name='date'])[last()]" position="after">
                 <div name="exchange_rate_group"
                      groups="base.group_multi_currency"
                      class="mt-2 text-muted"
