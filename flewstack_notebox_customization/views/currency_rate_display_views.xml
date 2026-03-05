@@ -31,6 +31,7 @@
                         <field name="company_currency_id" readonly="1" nolabel="1" options="{'no_open': True}" class="oe_inline"/>
                     </div>
                 </div>
+                <newline/>
             </xpath>
         </field>
     </record>
