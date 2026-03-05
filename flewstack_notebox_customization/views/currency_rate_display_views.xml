@@ -11,27 +11,14 @@
             <xpath expr="//group[@name='group1']/div[@name='amount_div']" position="after">
                 <group name="exchange_rate_group"
                        groups="base.group_multi_currency"
-                       class="mt-2">
-                    <div class="o_row align-items-center gap-2 text-muted"
-                         modifiers="{'invisible': [('currency_id', '=', company_currency_id)]}">
-                        <label for="payment_currency_rate" class="o_form_label mb-0">Exchange Rate</label>
-                        <div class="d-flex flex-wrap align-items-center gap-2">
-                            <span>1</span>
-                            <field name="company_currency_id" readonly="1" options="{'no_open': True}" class="w-auto"/>
-                            <span>=</span>
-                            <field name="payment_currency_rate"
-                                   digits="[12,6]"
-                                   class="oe_inline"
-                                   modifiers="{'readonly': [('state', '!=', 'draft')]}"/>
-                            <field name="currency_id" readonly="1" options="{'no_open': True}" class="w-auto"/>
-                        </div>
-                    </div>
-                    <div name="amount_company_currency_div"
-                         class="o_row align-items-center gap-2 text-muted"
-                         modifiers="{'invisible': [('currency_id', '=', company_currency_id)]}">
-                        <label for="payment_amount_company_currency" class="o_form_label mb-0">Amount in Company Currency</label>
-                        <field name="payment_amount_company_currency" readonly="1" class="oe_inline"/>
-                    </div>
+                       class="mt-2"
+                       modifiers="{'invisible': [('currency_id', '=', company_currency_id)]}">
+                    <label for="payment_currency_rate" string="Exchange Rate (1 Company = X Payment)"/>
+                    <field name="payment_currency_rate"
+                           digits="[12,6]"
+                           modifiers="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <label for="payment_amount_company_currency" string="Amount in Company Currency"/>
+                    <field name="payment_amount_company_currency" readonly="1"/>
                 </group>
             </xpath>
         </field>

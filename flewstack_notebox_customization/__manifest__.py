@@ -6,7 +6,7 @@
     "author": "Flewstack LLC",
     "license": "LGPL-3",
     "category": "Productivity",
-    "depends": ["product", "sale_management", "point_of_sale", "purchase", "stock"],
+    "depends": ["account", "product", "sale_management", "point_of_sale", "purchase", "stock"],
     "data": [
         "security/ir.model.access.csv",
         "views/product_brand_views.xml",
