@@ -6,8 +6,8 @@
             <t t-call="web.external_layout">
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <div class="clearfix">
-                    <div class="page mb-4">
-                        <h2>
+                    <div class="page mb-4" style="clear: both; padding-top: 2.5rem;">
+                        <h2 class="mb-4">
                             <span>Journal Entry</span>
                             <span t-if="o.name != '/'" t-field="o.name">INV/2023/0001</span>
                         </h2>
