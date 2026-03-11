@@ -13,29 +13,6 @@ const SUPPORTED_REPORT_NAMES = new Set([
     "sale.report_saleorder",
     "sale.report_saleorder_pro_forma",
 ]);
-const ACCOUNT_INVOICE_REPORT_NAMES = new Set([
-    "account.report_invoice",
-    "account.report_invoice_with_payments",
-]);
-const ACCOUNT_INVOICE_MOVE_TYPES = new Set([
-    "out_invoice",
-    "out_refund",
-    "out_receipt",
-    "in_invoice",
-    "in_refund",
-    "in_receipt",
-]);
-
-function getActiveMoveIds(action) {
-    const activeIds = action.context?.active_ids;
-    if (Array.isArray(activeIds) && activeIds.length) {
-        return activeIds;
-    }
-    if (typeof action.context?.active_id === "number") {
-        return [action.context.active_id];
-    }
-    return [];
-}
 
 function shouldPreviewReport(action) {
     if (action.report_type !== "qweb-pdf") {
@@ -53,35 +30,9 @@ function shouldPreviewReport(action) {
     return SUPPORTED_REPORT_NAMES.has(action.report_name);
 }
 
-async function hasNonInvoiceMoves(action, env) {
-    const activeModel = action.context?.active_model || action.model;
-    if (activeModel !== "account.move") {
-        return false;
-    }
-    if (!ACCOUNT_INVOICE_REPORT_NAMES.has(action.report_name)) {
-        return false;
-    }
-
-    const ids = getActiveMoveIds(action);
-    if (!ids.length) {
-        return false;
-    }
-
-    const moves = await env.services.orm.read("account.move", ids, ["move_type"]);
-    return moves.some((move) => !ACCOUNT_INVOICE_MOVE_TYPES.has(move.move_type));
-}
-
 async function previewDocumentsHandler(action, options, env) {
     if (!shouldPreviewReport(action)) {
         return false;
-    }
-    if (await hasNonInvoiceMoves(action, env)) {
-        env.services.notification.add(
-            _t("Invoice PDF is only available for invoices and receipts."),
-            { type: "warning" }
-        );
-        options?.onClose?.();
-        return true;
     }
 
     const reportUrl = getReportUrl(action, "pdf", user.context);
