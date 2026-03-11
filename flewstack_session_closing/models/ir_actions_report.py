@@ -22,8 +22,10 @@ class IrActionsReport(models.Model):
         invoices = self.env["account.move"]
 
         # Reversal relation (entry generated from invoice reversal flow or vice versa).
-        invoices |= move.reversed_entry_id.filtered(self._is_invoice_move)
-        invoices |= move.reversal_move_id.filtered(self._is_invoice_move)
+        if "reversed_entry_id" in move._fields and move.reversed_entry_id:
+            invoices |= move.reversed_entry_id.filtered(self._is_invoice_move)
+        if "reversal_move_id" in move._fields and move.reversal_move_id:
+            invoices |= move.reversal_move_id.filtered(self._is_invoice_move)
 
         # Payment relation (if this journal entry is a payment move).
         if "payment_id" in move._fields and move.payment_id:
@@ -35,8 +37,14 @@ class IrActionsReport(models.Model):
 
         # Reconciliation relation (common between entry and invoice receivable/payable lines).
         for line in move.line_ids:
-            invoices |= line.matched_debit_ids.mapped("credit_move_id.move_id").filtered(self._is_invoice_move)
-            invoices |= line.matched_credit_ids.mapped("debit_move_id.move_id").filtered(self._is_invoice_move)
+            if "matched_debit_ids" in line._fields:
+                invoices |= line.matched_debit_ids.mapped("credit_move_id.move_id").filtered(
+                    self._is_invoice_move
+                )
+            if "matched_credit_ids" in line._fields:
+                invoices |= line.matched_credit_ids.mapped("debit_move_id.move_id").filtered(
+                    self._is_invoice_move
+                )
             if "full_reconcile_id" in line._fields and line.full_reconcile_id:
                 invoices |= line.full_reconcile_id.reconciled_line_ids.mapped("move_id").filtered(
                     self._is_invoice_move
