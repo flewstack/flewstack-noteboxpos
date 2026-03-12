@@ -9,6 +9,7 @@ import { FlewstackDocumentPreviewDialog } from "./report_preview_dialog";
 const SUPPORTED_MODELS = new Set([
     "sale.order",
     "stock.picking",
+    "pos.order",
 ]);
 const SUPPORTED_REPORT_NAMES = new Set([
     "account.report_invoice",
