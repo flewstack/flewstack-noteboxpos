@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_return_picking_form_return_location" model="ir.ui.view">
+        <field name="name">stock.return.picking.form.return.location</field>
+        <field name="model">stock.return.picking</field>
+        <field name="inherit_id" ref="stock.view_stock_return_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_return_moves']" position="before">
+                <field name="apply_all_return_location_id"/>
+            </xpath>
+            <xpath expr="//field[@name='product_return_moves']/list/field[@name='quantity']" position="after">
+                <field
+                    name="return_location_id"
+                    domain="[('usage', '!=', 'view'), ('company_id', 'in', [False, parent.company_id])]"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
