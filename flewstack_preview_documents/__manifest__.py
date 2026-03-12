@@ -2,11 +2,11 @@
 {
     "name": "Flewstack Preview Documents",
     "version": "19.0.1.0.0",
-    "summary": "Preview quotations, invoices, and delivery slips in Odoo instead of downloading PDF files.",
+    "summary": "Preview quotations and invoices in Odoo instead of downloading PDF files.",
     "author": "Flewstack LLC",
-    "category": "Sales/Inventory/Invoicing",
+    "category": "Sales/Invoicing",
     "license": "LGPL-3",
-    "depends": ["web", "sale", "account", "stock"],
+    "depends": ["web", "sale", "account"],
     "data": [],
     "assets": {
         "web.assets_backend": [
