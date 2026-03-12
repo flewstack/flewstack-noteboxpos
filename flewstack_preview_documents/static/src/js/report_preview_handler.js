@@ -6,7 +6,10 @@ import { user } from "@web/core/user";
 import { getReportUrl } from "@web/webclient/actions/reports/utils";
 import { FlewstackDocumentPreviewDialog } from "./report_preview_dialog";
 
-const SUPPORTED_MODELS = new Set(["sale.order"]);
+const SUPPORTED_MODELS = new Set([
+    "sale.order",
+    "stock.picking",
+]);
 const SUPPORTED_REPORT_NAMES = new Set([
     "account.report_invoice",
     "account.report_invoice_with_payments",
