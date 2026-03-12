@@ -10,6 +10,7 @@ const SUPPORTED_MODELS = new Set([
     "sale.order",
     "stock.picking",
     "pos.order",
+    "pos.session",
 ]);
 const SUPPORTED_REPORT_NAMES = new Set([
     "account.report_invoice",
