@@ -14,7 +14,25 @@ const SUPPORTED_REPORT_NAMES = new Set([
     "sale.report_saleorder_pro_forma",
     "stock.report_deliveryslip",
     "stock.report_delivery_document",
+    "stock.action_report_delivery",
 ]);
+
+function getActionContext(action) {
+    if (!action?.context) {
+        return {};
+    }
+    if (typeof action.context === "object") {
+        return action.context;
+    }
+    if (typeof action.context === "string") {
+        try {
+            return JSON.parse(action.context);
+        } catch {
+            return {};
+        }
+    }
+    return {};
+}
 
 function shouldPreviewReport(action) {
     if (action.report_type !== "qweb-pdf") {
@@ -24,12 +42,25 @@ function shouldPreviewReport(action) {
         return false;
     }
 
-    const activeModel = action.context?.active_model || action.model;
+    const context = getActionContext(action);
+    const activeModel =
+        context.active_model ||
+        action.model ||
+        action.res_model ||
+        action.data?.model ||
+        null;
+    const reportName = action.report_name || action.report_file || action.xml_id || null;
+
     if (SUPPORTED_MODELS.has(activeModel)) {
         return true;
     }
 
-    return SUPPORTED_REPORT_NAMES.has(action.report_name);
+    if (SUPPORTED_REPORT_NAMES.has(reportName)) {
+        return true;
+    }
+
+    // Delivery reports can vary by report name across versions/customizations.
+    return activeModel === "stock.picking" && typeof reportName === "string" && reportName.startsWith("stock.");
 }
 
 async function previewDocumentsHandler(action, options, env) {
