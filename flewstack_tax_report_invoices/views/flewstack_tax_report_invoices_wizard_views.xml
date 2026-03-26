@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_flewstack_tax_report_invoices_wizard_form" model="ir.ui.view">
+        <field name="name">flewstack.tax.report.invoices.wizard.form</field>
+        <field name="model">flewstack.tax.report.invoices.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Tax Report Invoices Export">
+                <field name="is_exported" invisible="1"/>
+                <group invisible="is_exported">
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="move_state"/>
+                    </group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <group invisible="not is_exported">
+                    <field name="report_file" widget="binary" filename="report_filename" nolabel="1"/>
+                    <field name="report_filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="action_export_xlsx" string="Export Excel" type="object" class="btn-primary" invisible="is_exported"/>
+                    <button name="action_back" string="Back" type="object" class="btn-secondary" invisible="not is_exported"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_flewstack_tax_report_invoices_wizard" model="ir.actions.act_window">
+        <field name="name">Tax Report Invoices</field>
+        <field name="res_model">flewstack.tax.report.invoices.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_flewstack_tax_report_invoices_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_flewstack_tax_report_invoices_wizard"
+        name="Tax Report Invoices"
+        parent="account.account_reports_taxes_and_fiscal_menu"
+        sequence="50"
+        action="action_flewstack_tax_report_invoices_wizard"
+        groups="account.group_account_readonly,account.group_account_invoice"/>
+</odoo>
